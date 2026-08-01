@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebESK Al-Falah</title>
+  <style>
+
+:root{
+  --green:#0f5132;--green2:#18794e;--gold:#d5a72e;--cream:#f6f3ea;
+  --ink:#17221d;--muted:#6d776f;--line:#e3e8e4;--white:#fff;--danger:#b42318;
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#f5f7f5;color:var(--ink)}
+.hidden{display:none!important}
+.login-shell{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#0b3b25,#18794e)}
+.login-card{width:min(420px,100%);background:#fff;border-radius:22px;padding:30px;box-shadow:0 24px 70px #052b1c55}
+.brand-mark{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;background:var(--gold);color:#fff;font-weight:800;font-size:22px;margin:auto}
+.brand-mark.small{width:40px;height:40px;border-radius:12px;margin:0}
+.login-card h1{text-align:center;margin:16px 0 6px}.login-card p{text-align:center;color:var(--muted);margin:0 0 24px}
+label{display:block;font-size:13px;font-weight:700;margin:14px 0 7px}
+input,select,textarea{width:100%;border:1px solid #ced8d1;border-radius:10px;padding:11px 12px;font:inherit;background:#fff}
+textarea{min-height:90px;resize:vertical}
+button{border:0;border-radius:10px;padding:11px 15px;font:inherit;font-weight:700;cursor:pointer}
+#loginBtn,.primary{width:100%;background:var(--green);color:#fff;margin-top:18px}
+.error{color:var(--danger);font-size:13px;margin-top:10px}.demo-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;font-size:12px;color:var(--muted)}
+details{margin-top:18px}
+.app-shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:var(--green);color:#fff;padding:20px 14px;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 8px 22px}.brand small{display:block;color:#d8e9df;margin-top:2px}
+nav{display:grid;gap:5px;overflow:auto}
+.nav-btn{width:100%;text-align:left;background:transparent;color:#dcece3;padding:11px 12px}
+.nav-btn:hover,.nav-btn.active{background:#ffffff18;color:#fff}.logout{margin-top:auto;background:#ffffff12;color:#fff}
+main{min-width:0}.topbar{height:86px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:16px 28px;position:sticky;top:0;z-index:5}
+.topbar h2{margin:0}.topbar p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.user-chip{background:#eef7f1;padding:9px 12px;border-radius:999px;font-size:13px;display:flex;align-items:center;gap:8px}.status-dot{width:8px;height:8px;border-radius:50%;background:#23a55a}
+#content{padding:25px 28px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}.kpi span{color:var(--muted);font-size:13px}.kpi strong{display:block;font-size:26px;margin-top:8px}.kpi.gold{border-top:4px solid var(--gold)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;overflow:hidden}.panel h3{margin:0 0 15px}
+.bar-row{margin:12px 0}.bar-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px}.bar{height:9px;background:#e9efeb;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:var(--green2);border-radius:999px}
+.toolbar{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}.toolbar input{max-width:330px}.toolbar button{background:var(--green);color:#fff}
+.table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px}
+table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{background:#eef5f0;color:#345445;position:sticky;top:0}tr:hover td{background:#fafcfb}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#eaf3ed;color:#17603d;font-size:12px;font-weight:700}.badge.warn{background:#fff3d6;color:#8a5d00}.badge.danger{background:#feeceb;color:#a1261c}
+.actions{display:flex;gap:6px}.icon-btn{padding:7px 9px;background:#edf3ef}.icon-btn.danger{background:#feeceb;color:#a1261c}
+.empty{padding:32px;text-align:center;color:var(--muted)}.note{padding:12px 14px;border-left:4px solid var(--gold);background:#fff8df;border-radius:8px;margin-bottom:16px;font-size:13px}
+.modal{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:20px;z-index:20}.modal-card{width:min(600px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;padding:22px;position:relative}.close{position:absolute;right:12px;top:10px;background:transparent;font-size:25px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid .full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.form-actions button{width:auto}.secondary{background:#edf2ef}
+@media(max-width:900px){.app-shell{grid-template-columns:82px 1fr}.brand div:last-child,.nav-label{display:none}.sidebar{padding:14px 8px}.nav-btn{text-align:center}.kpis{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}}
+@media(max-width:620px){.app-shell{display:block}.sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:64px;z-index:10;flex-direction:row;align-items:center;overflow:auto}.brand,.logout{display:none}nav{display:flex}.nav-btn{white-space:nowrap}.topbar{padding:12px 16px}.user-chip{display:none}#content{padding:18px 14px 90px}.kpis{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}}
+
+</style>
+</head>
+<body>
+  <div id="loginView" class="login-shell">
+    <div class="login-card">
+      <div class="brand-mark">AF</div>
+      <h1>WebESK Al-Falah</h1>
+      <p>Sistem Kepegawaian & Keuangan Pondok Pesantren</p>
+      <label>Peran Akses</label>
+      <select id="roleSelect">
+        <option value="admin">Administrator</option>
+        <option value="mudir">Mudir / Pimpinan</option>
+        <option value="sdm">Petugas SDM</option>
+        <option value="keuangan">Bendahara</option>
+        <option value="auditor">Auditor Internal</option>
+        <option value="viewer">Viewer</option>
+      </select>
+      <label>PIN</label>
+      <input id="pinInput" type="password" maxlength="6" inputmode="numeric" placeholder="Masukkan 6 digit PIN" />
+      <button id="loginBtn">Masuk</button>
+      <div id="loginError" class="error"></div>
+      <details>
+        <summary>Akun demo</summary>
+        <div class="demo-list">
+          <span>Admin: 123456</span><span>Mudir: 111111</span>
+          <span>SDM: 222222</span><span>Keuangan: 333333</span>
+          <span>Auditor: 444444</span><span>Viewer: 555555</span>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark small">AF</div>
+        <div><strong>WebESK</strong><small>Al-Falah</small></div>
+      </div>
+      <nav id="menu"></nav>
+      <button id="logoutBtn" class="logout">Keluar</button>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">Dashboard</h2>
+          <p id="pageSubtitle">Ringkasan sistem</p>
+        </div>
+        <div class="user-chip">
+          <span id="userRole"></span>
+          <span class="status-dot"></span>
+        </div>
+      </header>
+      <section id="content"></section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <button id="closeModal" class="close">×</button>
+      <h3 id="modalTitle">Tambah Data</h3>
+      <form id="dataForm"></form>
+    </div>
+  </div>
+
+  <script>
+
+const ROLES = {
+  admin:{
+    label:"Administrator",pin:"123456",
+    menus:["dashboard","profil","pegawai","kebutuhan","rekrutmen","pengembangan","kinerja","penghargaan","rapbs","kasmasuk","kaskeluar","bukukas","realisasi","laporan","audit"],
+    write:["*"]
+  },
+  mudir:{
+    label:"Mudir / Pimpinan",pin:"111111",
+    menus:["dashboard","profil","pegawai","kebutuhan","kinerja","penghargaan","rapbs","bukukas","realisasi","laporan","audit"],
+    write:["profil","kinerja","penghargaan","audit"]
+  },
+  sdm:{
+    label:"Petugas SDM",pin:"222222",
+    menus:["dashboard","pegawai","kebutuhan","rekrutmen","pengembangan","kinerja","penghargaan"],
+    write:["pegawai","kebutuhan","rekrutmen","pengembangan","kinerja","penghargaan"]
+  },
+  keuangan:{
+    label:"Bendahara",pin:"333333",
+    menus:["dashboard","rapbs","kasmasuk","kaskeluar","bukukas","realisasi","laporan"],
+    write:["rapbs","kasmasuk","kaskeluar"]
+  },
+  auditor:{
+    label:"Auditor Internal",pin:"444444",
+    menus:["dashboard","bukukas","realisasi","laporan","audit"],
+    write:["audit"]
+  },
+  viewer:{
+    label:"Viewer",pin:"555555",
+    menus:["dashboard","profil","laporan"],
+    write:[]
+  }
+};
+const MENU = {
+ dashboard:"Dashboard",profil:"Profil Lembaga",pegawai:"Database Pegawai",kebutuhan:"Kebutuhan SDM",
+ rekrutmen:"Rekrutmen",pengembangan:"Pengembangan SDM",kinerja:"Evaluasi Kinerja",
+ penghargaan:"Penghargaan & Pembinaan",rapbs:"RAPBS / RKAS",kasmasuk:"Kas Masuk",
+ kaskeluar:"Kas Keluar",bukukas:"Buku Kas Umum",realisasi:"Realisasi Anggaran",
+ laporan:"Laporan Keuangan",audit:"Audit Internal"
+};
+const seed = {
+ profil:{nama:"Pondok Pesantren Al-Falah",jenis:"Pesantren (Pendidikan Diniyah dan Formal Terpadu)",alamat:"Jl. Raya Cendekia No. 17, Kec. Sukamaju, Kab. Bogor, Jawa Barat",berdiri:2005,pimpinan:"Ust. Ahmad Fauzi, S.Pd.I., M.Pd.",santri:340,unit:"RA, MI, MTs, MA, Program Tahfidz, Madrasah Diniyah"},
+ pegawai:[
+ ["PAF-2015-001","Ust. Ahmad Fauzi, S.Pd.I., M.Pd.","Mudir","Pimpinan","Tetap","S2","2015-01-10","0812-1000-0001","Aktif"],
+ ["PAF-2016-002","Ust. Rian Hidayat, S.Pd.","Wakil Mudir","Pimpinan","Tetap","S1","2016-03-01","0812-1000-0002","Aktif"],
+ ["PAF-2017-003","Ust. Hasan Basri, S.Pd.I.","Guru Tahfidz","Tahfidz","Tetap","S1","2017-07-01","0812-1000-0003","Aktif"],
+ ["PAF-2018-004","Ust. Zainal Abidin, S.Pd.I.","Guru Tahfidz","Tahfidz","Tetap","S1","2018-07-01","0812-1000-0004","Aktif"],
+ ["PAF-2022-005","Ust. Fahmi Ridho, S.Pd.","Guru Tahfidz","Tahfidz","Kontrak","S1","2022-07-01","0812-1000-0005","Nonaktif"],
+ ["PAF-2019-006","Ustzh. Aisyah Putri, S.Pd.","Musyrif Asrama","Asrama Putri","Tetap","S1","2019-01-15","0812-1000-0006","Aktif"],
+ ["PAF-2019-007","Ust. Bilal Rahman, S.Pd.","Musyrif Asrama","Asrama Putra","Tetap","S1","2019-01-15","0812-1000-0007","Aktif"],
+ ["PAF-2023-008","Ust. Umar Faruq","Musyrif Asrama","Asrama Putra","Kontrak","SMA/Pesantren","2023-01-10","0812-1000-0008","Aktif"],
+ ["PAF-2018-009","Ustzh. Nurul Hidayah, S.Pd.I.","Guru Diniyah","Diniyah","Tetap","S1","2018-01-01","0812-1000-0009","Aktif"],
+ ["PAF-2020-010","Ust. Syamsul Arifin, S.Pd.I.","Guru Diniyah","Diniyah","Tetap","S1","2020-01-01","0812-1000-0010","Aktif"],
+ ["PAF-2017-011","Ustzh. Fatimah Azzahra, S.Pd.","Guru Formal","Formal","Tetap","S1","2017-07-15","0812-1000-0011","Aktif"],
+ ["PAF-2019-012","Ust. Yusuf Mansur, S.Pd.","Guru Formal","Formal","Tetap","S1","2019-07-15","0812-1000-0012","Aktif"],
+ ["PAF-2021-013","Ustzh. Halimah Sa'diyah, S.Pd.","Guru Formal","Formal","Kontrak","S1","2021-07-15","0812-1000-0013","Aktif"],
+ ["PAF-2020-014","Ust. Dedi Kurniawan, A.Md.","Staf Administrasi","Administrasi","Tetap","D3","2020-02-01","0812-1000-0014","Aktif"],
+ ["PAF-2016-015","Ust. Taufik Hidayat, S.E.","Bendahara","Keuangan","Tetap","S1","2016-06-01","0812-1000-0015","Aktif"]],
+ kebutuhan:[["Mudir",1],["Wakil Mudir",1],["Guru Tahfidz",5],["Musyrif Asrama",5],["Guru Diniyah",4],["Guru Formal",8],["Staf Administrasi",2],["Bendahara",1]],
+ rekrutmen:[
+ ["Fauzan Ammar","Guru Formal","2026-06-01","Wawancara","Proses","Menunggu"],
+ ["Siti Rahmawati","Guru Diniyah","2026-06-05","Microteaching/Tes Praktik","Lulus","Diterima"],
+ ["Abdul Karim","Musyrif Asrama","2026-06-10","Seleksi Administrasi","Proses","Menunggu"],
+ ["Laila Nur Azizah","Guru Tahfidz","2026-06-12","Keputusan Penerimaan","Lulus","Diterima"],
+ ["Rizky Maulana","Staf Administrasi","2026-06-15","Seleksi Administrasi","Tidak Lulus","Ditolak"],
+ ["Dewi Anggraini","Guru Formal","2026-06-20","Keputusan Penerimaan","Lulus","Diterima"]],
+ pengembangan:[
+ ["Pelatihan Metode Mengajar Aktif",12,"Juli 2026",3000000,"Guru mampu menyusun modul ajar aktif."],
+ ["Pembinaan Ruhiyah & Kedisiplinan",15,"Setiap Bulan",1000000,"Kedisiplinan pegawai meningkat."],
+ ["Pelatihan Tahsin & Tajwid",5,"Agustus 2026",3000000,"Kualitas bacaan Al-Qur'an meningkat."],
+ ["Workshop Administrasi Pembelajaran",8,"September 2026",2000000,"Kelengkapan perangkat ajar meningkat."],
+ ["Pelatihan Teknologi Pendidikan",10,"Oktober 2026",2500000,"Guru mampu memakai platform digital."]],
+ kinerja:[
+ ["PAF-2017-003","Ust. Hasan Basri, S.Pd.I.","Semester 1 2026",5,5,5,4,5,97,"Sangat Baik"],
+ ["PAF-2018-004","Ust. Zainal Abidin, S.Pd.I.","Semester 1 2026",4,4,5,4,4,85,"Baik"],
+ ["PAF-2019-006","Ustzh. Aisyah Putri, S.Pd.","Semester 1 2026",5,4,5,4,5,91,"Sangat Baik"],
+ ["PAF-2019-007","Ust. Bilal Rahman, S.Pd.","Semester 1 2026",4,4,4,3,4,77,"Baik"],
+ ["PAF-2023-008","Ust. Umar Faruq","Semester 1 2026",3,3,4,3,3,65,"Cukup"],
+ ["PAF-2018-009","Ustzh. Nurul Hidayah, S.Pd.I.","Semester 1 2026",4,4,5,4,4,85,"Baik"]],
+ penghargaan:[
+ ["PAF-2017-003","Ust. Hasan Basri, S.Pd.I.","Penghargaan","Apresiasi Bulanan","2026-07-01","Konsisten membina prestasi tahfidz."],
+ ["PAF-2023-008","Ust. Umar Faruq","Pembinaan","Teguran Lisan","2026-06-10","Keterlambatan piket asrama."]],
+ rapbs:[
+ ["Program Tahsin Guru","Pelatihan tahsin 8 pertemuan","SDM",3000000,"Syahriyah","Koordinator Tahfidz","Semester 1"],
+ ["Renovasi Asrama Putra","Perbaikan atap & sanitasi","Sarana Prasarana",25000000,"Infak Pembangunan","Mudir","Semester 1"],
+ ["Program Parenting Wali Santri","Seminar parenting","Kesantrian",5000000,"Iuran Kegiatan","Wakil Mudir","Semester 2"],
+ ["Pengadaan Buku Diniyah","Pembelian kitab & buku","Akademik",4500000,"Syahriyah","Koordinator Diniyah","Semester 1"],
+ ["Operasional Harian Pesantren","ATK, listrik, air, kebersihan","Operasional",12000000,"Syahriyah","Staf Administrasi","Semester 1 & 2"]],
+ kasmasuk:[
+ ["2026-07-01","KM-001","Syahriyah","Penerimaan syahriyah santri bulan Juli",45000000,"Transfer"],
+ ["2026-07-02","KM-002","Infak Pembangunan","Infak donatur tetap",5000000,"Transfer"],
+ ["2026-07-03","KM-003","Donasi/Sedekah","Donasi masyarakat sekitar",1500000,"Tunai"],
+ ["2026-07-05","KM-004","Iuran Kegiatan","Iuran seminar parenting",2000000,"Tunai"],
+ ["2026-07-07","KM-005","Syahriyah","Susulan syahriyah",3000000,"Transfer"]],
+ kaskeluar:[
+ ["2026-07-02","KK-001","SDM","Pembayaran instruktur tahsin","Program Tahsin Guru",3000000,"Transfer"],
+ ["2026-07-03","KK-002","Operasional","Pembelian ATK","Operasional Harian Pesantren",1200000,"Tunai"],
+ ["2026-07-04","KK-003","Sarana Prasarana","DP renovasi atap","Renovasi Asrama Putra",10000000,"Transfer"],
+ ["2026-07-06","KK-004","Operasional","Pembayaran listrik & air","Operasional Harian Pesantren",2000000,"Transfer"],
+ ["2026-07-08","KK-005","Akademik","Pembelian kitab & buku","Pengadaan Buku Diniyah",4500000,"Transfer"]],
+ audit:[
+ ["Kelengkapan bukti transaksi","Ya","Seluruh transaksi memiliki nomor bukti.","Pertahankan arsip bukti fisik.","Selesai"],
+ ["Kesesuaian pengeluaran dengan RAPBS","Tidak","Ada transaksi non-program.","Tambahkan pos Kontinjensi/Rutin.","Proses"],
+ ["Pemisahan dana syariah","Ya","Dana zakat tercatat terpisah.","Lanjutkan pemisahan pos dana.","Selesai"],
+ ["Ketepatan pelaporan bulanan","Tidak","Laporan terlambat lebih dari 10 hari.","Tetapkan tenggat H+5.","Belum"]]
+};
+let db = JSON.parse(localStorage.getItem("webesk_db") || "null") || structuredClone(seed);
+let session = null, current = "dashboard";
+const $ = s => document.querySelector(s);
+const money = n => new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n||0));
+const save = ()=>localStorage.setItem("webesk_db",JSON.stringify(db));
+const canWrite = m => session && (ROLES[session].write.includes("*") || ROLES[session].write.includes(m));
+const esc = v => String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+$("#loginBtn").onclick=()=>{
+ const role=$("#roleSelect").value,pin=$("#pinInput").value;
+ if(ROLES[role].pin!==pin){$("#loginError").textContent="Peran atau PIN tidak sesuai.";return}
+ session=role;$("#loginView").classList.add("hidden");$("#appView").classList.remove("hidden");
+ $("#userRole").textContent=ROLES[role].label;buildMenu();navigate("dashboard");
+};
+$("#pinInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("#loginBtn").click()});
+$("#logoutBtn").onclick=()=>location.reload();
+$("#closeModal").onclick=()=>$("#modal").classList.add("hidden");
+
+function buildMenu(){
+ $("#menu").innerHTML=ROLES[session].menus.map(k=>`<button class="nav-btn" data-page="${k}"><span class="nav-label">${MENU[k]}</span></button>`).join("");
+ document.querySelectorAll(".nav-btn").forEach(b=>b.onclick=()=>navigate(b.dataset.page));
+}
+function navigate(page){
+ if(!session || !ROLES[session].menus.includes(page)){
+   alert("Anda tidak memiliki akses ke menu ini.");
+   page="dashboard";
+ }
+ current=page;
+ document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ $("#pageTitle").textContent=MENU[page];
+ $("#pageSubtitle").textContent=canWrite(page)
+   ? "Hak akses: dapat melihat, menambah, mengedit, dan menghapus"
+   : "Hak akses: hanya dapat melihat";
+ render();
+}
+function render(){
+ if(current==="dashboard") return renderDashboard();
+ if(current==="profil") return renderProfil();
+ if(current==="kebutuhan") return renderKebutuhan();
+ if(current==="bukukas") return renderBukuKas();
+ if(current==="realisasi") return renderRealisasi();
+ if(current==="laporan") return renderLaporan();
+ const configs={
+ pegawai:{headers:["NIK","Nama","Jabatan","Unit","Status Kerja","Pendidikan","Tanggal Masuk","Kontak","Status Aktif"],fields:["nik","nama","jabatan","unit","status","pendidikan","tanggal","kontak","aktif"],types:["text","text","text","text","text","text","date","text","text"]},
+ rekrutmen:{headers:["Nama Pelamar","Posisi","Tanggal Lamar","Tahapan","Hasil","Status"],fields:["nama","posisi","tanggal","tahapan","hasil","status"],types:["text","text","date","text","text","text"]},
+ pengembangan:{headers:["Program","Peserta","Jadwal","Biaya","Hasil / Evaluasi"],fields:["program","peserta","jadwal","biaya","hasil"],types:["text","number","text","number","textarea"]},
+ kinerja:{headers:["NIK","Nama","Periode","Disiplin","Kualitas","Akhlak","Administrasi","Kerja Sama","Nilai","Kategori"],fields:["nik","nama","periode","disiplin","kualitas","akhlak","administrasi","kerjasama","nilai","kategori"],types:["text","text","text","number","number","number","number","number","number","text"]},
+ penghargaan:{headers:["NIK","Nama","Jenis","Bentuk","Tanggal","Tindak Lanjut"],fields:["nik","nama","jenis","bentuk","tanggal","catatan"],types:["text","text","text","text","date","textarea"]},
+ rapbs:{headers:["Program","Kegiatan","Kategori","Anggaran","Sumber Dana","Penanggung Jawab","Periode"],fields:["program","kegiatan","kategori","anggaran","sumber","pj","periode"],types:["text","text","text","number","text","text","text"]},
+ kasmasuk:{headers:["Tanggal","No. Bukti","Sumber","Uraian","Nominal","Metode"],fields:["tanggal","bukti","sumber","uraian","nominal","metode"],types:["date","text","text","text","number","text"]},
+ kaskeluar:{headers:["Tanggal","No. Bukti","Kategori","Uraian","Program","Nominal","Metode"],fields:["tanggal","bukti","kategori","uraian","program","nominal","metode"],types:["date","text","text","text","text","number","text"]},
+ audit:{headers:["Komponen Audit","Kesesuaian","Temuan","Rekomendasi","Status"],fields:["komponen","kesesuaian","temuan","rekomendasi","status"],types:["text","text","textarea","textarea","text"]}
+ };
+ renderTable(current,configs[current]);
+}
+function renderDashboard(){
+ const active=db.pegawai.filter(r=>r[8]==="Aktif").length;
+ const masuk=db.kasmasuk.reduce((a,r)=>a+Number(r[4]),0),keluar=db.kaskeluar.reduce((a,r)=>a+Number(r[5]),0),saldo=10000000+masuk-keluar;
+ const totalAng=db.rapbs.reduce((a,r)=>a+Number(r[3]),0);
+ const bars=db.kebutuhan.map(r=>{const have=db.pegawai.filter(p=>p[2]===r[0]&&p[8]==="Aktif").length;return {j:r[0],need:r[1],have}});
+ $("#content").innerHTML=`<div class="note"><b>Login sebagai ${ROLES[session].label}.</b> Menu dan tombol ubah di bawah mengikuti hak akses peran ini.</div><div class="kpis">
+ <div class="kpi gold"><span>Pegawai Aktif</span><strong>${active}</strong></div>
+ <div class="kpi"><span>Total Anggaran</span><strong>${money(totalAng)}</strong></div>
+ <div class="kpi"><span>Kas Masuk</span><strong>${money(masuk)}</strong></div>
+ <div class="kpi"><span>Saldo Kas</span><strong>${money(saldo)}</strong></div></div>
+ <div class="grid-2"><div class="panel"><h3>Kebutuhan SDM</h3>${bars.map(x=>`<div class="bar-row"><div class="bar-label"><span>${esc(x.j)}</span><b>${x.have}/${x.need}</b></div><div class="bar"><i style="width:${Math.min(100,x.have/x.need*100)}%"></i></div></div>`).join("")}</div>
+ <div class="panel"><h3>Status Sistem</h3><div class="note">Data awal diambil dari XLSX Pondok Pesantren Al-Falah. Perubahan tersimpan pada browser ini.</div>
+ <p><b>Peran aktif:</b> ${ROLES[session].label}</p><p><b>Hak ubah:</b> ${ROLES[session].write.length?ROLES[session].write.join(", "):"Tidak ada"}</p>
+ <button class="secondary" onclick="resetData()">Reset data demo</button></div></div>`;
+}
+function renderProfil(){
+ const p=db.profil;
+ const editButton=canWrite("profil")
+   ? `<button id="editProfilBtn">Edit Profil</button>`
+   : "";
+ $("#content").innerHTML=`
+   <div class="note">${canWrite("profil")?"Anda dapat mengubah profil lembaga.":"Profil hanya dapat dibaca oleh peran ini."}</div>
+   <div class="toolbar"><div></div>${editButton}</div>
+   <div class="panel">
+     <h3>${esc(p.nama)}</h3>
+     <table><tbody>
+       ${Object.entries({
+         Jenis:p.jenis,
+         Alamat:p.alamat,
+         "Tahun Berdiri":p.berdiri,
+         Pimpinan:p.pimpinan,
+         "Jumlah Santri":p.santri,
+         "Unit Pendidikan":p.unit
+       }).map(([k,v])=>`<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}
+     </tbody></table>
+   </div>`;
+ if(canWrite("profil")){
+   $("#editProfilBtn").onclick=()=>openProfileForm();
+ }
+}
+function openProfileForm(){
+ const p=db.profil;
+ $("#modalTitle").textContent="Edit Profil Lembaga";
+ $("#dataForm").innerHTML=`
+   <div class="form-grid">
+     <div class="full"><label>Nama Lembaga</label><input name="nama" value="${esc(p.nama)}"></div>
+     <div class="full"><label>Jenis</label><input name="jenis" value="${esc(p.jenis)}"></div>
+     <div class="full"><label>Alamat</label><textarea name="alamat">${esc(p.alamat)}</textarea></div>
+     <div><label>Tahun Berdiri</label><input name="berdiri" type="number" value="${esc(p.berdiri)}"></div>
+     <div><label>Jumlah Santri</label><input name="santri" type="number" value="${esc(p.santri)}"></div>
+     <div class="full"><label>Pimpinan</label><input name="pimpinan" value="${esc(p.pimpinan)}"></div>
+     <div class="full"><label>Unit Pendidikan</label><textarea name="unit">${esc(p.unit)}</textarea></div>
+   </div>
+   <div class="form-actions">
+     <button type="button" class="secondary" id="cancelProfile">Batal</button>
+     <button class="primary" style="width:auto;margin:0">Simpan</button>
+   </div>`;
+ $("#cancelProfile").onclick=()=>$("#modal").classList.add("hidden");
+ $("#dataForm").onsubmit=e=>{
+   e.preventDefault();
+   const fd=new FormData(e.target);
+   db.profil={
+     nama:fd.get("nama"),jenis:fd.get("jenis"),alamat:fd.get("alamat"),
+     berdiri:Number(fd.get("berdiri")),pimpinan:fd.get("pimpinan"),
+     santri:Number(fd.get("santri")),unit:fd.get("unit")
+   };
+   save();
+   $("#modal").classList.add("hidden");
+   renderProfil();
+ };
+ $("#modal").classList.remove("hidden");
+}
+function renderKebutuhan(){
+ const writable=canWrite("kebutuhan");
+ const rows=db.kebutuhan.map((r,i)=>{
+   const have=db.pegawai.filter(p=>p[2]===r[0]&&p[8]==="Aktif").length;
+   const diff=Number(r[1])-have;
+   return {i,data:[i+1,r[0],r[1],have,diff,diff<=0?"Terpenuhi":diff>=4?"Tinggi":diff>=2?"Sedang":"Rendah"]};
+ });
+ $("#content").innerHTML=`
+   <div class="note">${writable?"Anda dapat mengubah target kebutuhan SDM. Jumlah tersedia dihitung otomatis dari pegawai aktif.":"Data kebutuhan SDM hanya dapat dibaca."}</div>
+   <div class="toolbar"><div></div>${writable?`<button id="addNeedBtn">+ Tambah Kebutuhan</button>`:""}</div>
+   <div class="table-wrap"><table>
+     <thead><tr>
+       <th>No</th><th>Jabatan</th><th>Kebutuhan</th><th>Tersedia</th>
+       <th>Kekurangan</th><th>Prioritas</th>${writable?"<th>Aksi</th>":""}
+     </tr></thead>
+     <tbody>${rows.map(x=>`<tr>
+       ${x.data.map(v=>`<td>${badge(v)}</td>`).join("")}
+       ${writable?`<td class="actions">
+         <button class="icon-btn need-edit" data-index="${x.i}">Edit</button>
+         <button class="icon-btn danger need-delete" data-index="${x.i}">Hapus</button>
+       </td>`:""}
+     </tr>`).join("")}</tbody>
+   </table></div>`;
+ if(writable){
+   $("#addNeedBtn").onclick=()=>openNeedForm();
+   document.querySelectorAll(".need-edit").forEach(b=>b.onclick=()=>openNeedForm(Number(b.dataset.index)));
+   document.querySelectorAll(".need-delete").forEach(b=>b.onclick=()=>{
+     const i=Number(b.dataset.index);
+     if(confirm("Hapus kebutuhan jabatan ini?")){
+       db.kebutuhan.splice(i,1);save();renderKebutuhan();
+     }
+   });
+ }
+}
+function openNeedForm(index=null){
+ const row=index===null?["",1]:db.kebutuhan[index];
+ $("#modalTitle").textContent=index===null?"Tambah Kebutuhan SDM":"Edit Kebutuhan SDM";
+ $("#dataForm").innerHTML=`
+   <div class="form-grid">
+     <div class="full"><label>Jabatan</label><input name="jabatan" value="${esc(row[0])}" required></div>
+     <div class="full"><label>Jumlah Kebutuhan</label><input name="jumlah" type="number" min="0" value="${esc(row[1])}" required></div>
+   </div>
+   <div class="form-actions">
+     <button type="button" class="secondary" id="cancelNeed">Batal</button>
+     <button class="primary" style="width:auto;margin:0">Simpan</button>
+   </div>`;
+ $("#cancelNeed").onclick=()=>$("#modal").classList.add("hidden");
+ $("#dataForm").onsubmit=e=>{
+   e.preventDefault();
+   const fd=new FormData(e.target);
+   const value=[fd.get("jabatan"),Number(fd.get("jumlah"))];
+   if(index===null) db.kebutuhan.push(value); else db.kebutuhan[index]=value;
+   save();$("#modal").classList.add("hidden");renderKebutuhan();
+ };
+ $("#modal").classList.remove("hidden");
+}
+function bukuKasRows(){
+ let rows=[...db.kasmasuk.map(r=>({date:r[0],bukti:r[1],uraian:r[3],masuk:+r[4],keluar:0})),...db.kaskeluar.map(r=>({date:r[0],bukti:r[1],uraian:r[3],masuk:0,keluar:+r[5]}))].sort((a,b)=>a.date.localeCompare(b.date));
+ let saldo=10000000;return rows.map((r,i)=>{saldo+=r.masuk-r.keluar;return [i+1,r.date,r.bukti,r.uraian,money(r.masuk),money(r.keluar),money(saldo)]});
+}
+function renderBukuKas(){ $("#content").innerHTML=`<div class="note">Saldo awal: ${money(10000000)}</div>`+tableHtml(["No","Tanggal","No. Bukti","Uraian","Kas Masuk","Kas Keluar","Saldo"],bukuKasRows(),false); }
+function renderRealisasi(){
+ const rows=db.rapbs.map((r,i)=>{const real=db.kaskeluar.filter(k=>k[4]===r[0]).reduce((a,k)=>a+Number(k[5]),0),sel=Number(r[3])-real,p=Number(r[3])?real/Number(r[3])*100:0;return [i+1,r[0],money(r[3]),money(real),money(sel),p.toFixed(1)+"%",p>=90?"Realisasi Baik":p>=50?"Berjalan":"Rendah"]});
+ $("#content").innerHTML=tableHtml(["No","Program","Anggaran","Realisasi","Selisih","Penyerapan","Keterangan"],rows,false);
+}
+function renderLaporan(){
+ const masuk=db.kasmasuk.reduce((a,r)=>a+Number(r[4]),0),keluar=db.kaskeluar.reduce((a,r)=>a+Number(r[5]),0);
+ $("#content").innerHTML=`<div class="kpis"><div class="kpi"><span>Saldo Awal</span><strong>${money(10000000)}</strong></div><div class="kpi"><span>Total Masuk</span><strong>${money(masuk)}</strong></div><div class="kpi"><span>Total Keluar</span><strong>${money(keluar)}</strong></div><div class="kpi gold"><span>Saldo Akhir</span><strong>${money(10000000+masuk-keluar)}</strong></div></div>`;
+}
+function renderTable(key,cfg){
+ const writable=canWrite(key);
+ $("#content").innerHTML=`<div class="toolbar"><input id="search" placeholder="Cari data...">${writable?`<button id="addBtn">+ Tambah Data</button>`:""}</div><div id="tableHost"></div>`;
+ const draw=()=>{
+  const q=($("#search").value||"").toLowerCase(),rows=db[key].map((r,i)=>({r,i})).filter(x=>x.r.join(" ").toLowerCase().includes(q));
+  $("#tableHost").innerHTML=tableHtml(cfg.headers,rows.map(x=>x.r),writable,rows.map(x=>x.i));
+ };
+ $("#search").oninput=draw;if(writable)$("#addBtn").onclick=()=>openForm(key,cfg);draw();
+}
+function tableHtml(headers,rows,actions=false,indexes=[]){
+ return `<div class="table-wrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}${actions?"<th>Aksi</th>":""}</tr></thead><tbody>${rows.length?rows.map((r,ri)=>`<tr>${r.map((v,ci)=>`<td>${typeof v==="number"&&headers[ci]?.match(/Biaya|Nominal|Anggaran/)?money(v):badge(v)}</td>`).join("")}${actions?`<td class="actions"><button class="icon-btn" onclick="editRow('${current}',${indexes[ri]})">Edit</button><button class="icon-btn danger" onclick="deleteRow('${current}',${indexes[ri]})">Hapus</button></td>`:""}</tr>`).join(""):`<tr><td colspan="${headers.length+1}" class="empty">Belum ada data</td></tr>`}</tbody></table></div>`;
+}
+function badge(v){
+ const s=String(v??"");const danger=["Tidak","Ditolak","Nonaktif","Belum"].includes(s),warn=["Proses","Menunggu","Cukup","Sedang","Rendah"].includes(s);
+ return danger||warn||["Aktif","Selesai","Diterima","Baik","Sangat Baik","Terpenuhi","Ya"].includes(s)?`<span class="badge ${danger?"danger":warn?"warn":""}">${esc(s)}</span>`:esc(s);
+}
+function openForm(key,cfg,index=null){
+ const row=index===null?Array(cfg.fields.length).fill(""):db[key][index];
+ $("#modalTitle").textContent=(index===null?"Tambah ":"Edit ")+MENU[key];
+
+ const formFields = cfg.fields.map((f,i)=>{
+   const isTextarea = cfg.types[i]==="textarea";
+   const fieldClass = isTextarea ? "full" : "";
+   const control = isTextarea
+     ? `<textarea name="${i}">${esc(row[i])}</textarea>`
+     : `<input name="${i}" type="${cfg.types[i]}" value="${esc(row[i])}" ${cfg.types[i]==="number"?"step='any'":""}>`;
+
+   return `<div class="${fieldClass}">
+     <label>${cfg.headers[i]}</label>
+     ${control}
+   </div>`;
+ }).join("");
+
+ $("#dataForm").innerHTML=`<div class="form-grid">${formFields}</div>
+   <div class="form-actions">
+     <button type="button" class="secondary" onclick="document.querySelector('#modal').classList.add('hidden')">Batal</button>
+     <button class="primary" style="width:auto;margin:0">Simpan</button>
+   </div>`;
+
+ $("#dataForm").onsubmit=e=>{
+   e.preventDefault();
+   const vals=cfg.fields.map((_,i)=>{
+     let v=e.target.elements[i].value;
+     return cfg.types[i]==="number"?Number(v):v;
+   });
+   if(index===null) db[key].push(vals);
+   else db[key][index]=vals;
+   save();
+   $("#modal").classList.add("hidden");
+   render();
+ };
+ $("#modal").classList.remove("hidden");
+}
+window.editRow=(key,index)=>{
+ const configs={
+ pegawai:{headers:["NIK","Nama","Jabatan","Unit","Status Kerja","Pendidikan","Tanggal Masuk","Kontak","Status Aktif"],fields:Array(9).fill(""),types:["text","text","text","text","text","text","date","text","text"]},
+ rekrutmen:{headers:["Nama Pelamar","Posisi","Tanggal Lamar","Tahapan","Hasil","Status"],fields:Array(6).fill(""),types:["text","text","date","text","text","text"]},
+ pengembangan:{headers:["Program","Peserta","Jadwal","Biaya","Hasil / Evaluasi"],fields:Array(5).fill(""),types:["text","number","text","number","textarea"]},
+ kinerja:{headers:["NIK","Nama","Periode","Disiplin","Kualitas","Akhlak","Administrasi","Kerja Sama","Nilai","Kategori"],fields:Array(10).fill(""),types:["text","text","text","number","number","number","number","number","number","text"]},
+ penghargaan:{headers:["NIK","Nama","Jenis","Bentuk","Tanggal","Tindak Lanjut"],fields:Array(6).fill(""),types:["text","text","text","text","date","textarea"]},
+ rapbs:{headers:["Program","Kegiatan","Kategori","Anggaran","Sumber Dana","Penanggung Jawab","Periode"],fields:Array(7).fill(""),types:["text","text","text","number","text","text","text"]},
+ kasmasuk:{headers:["Tanggal","No. Bukti","Sumber","Uraian","Nominal","Metode"],fields:Array(6).fill(""),types:["date","text","text","text","number","text"]},
+ kaskeluar:{headers:["Tanggal","No. Bukti","Kategori","Uraian","Program","Nominal","Metode"],fields:Array(7).fill(""),types:["date","text","text","text","text","number","text"]},
+ audit:{headers:["Komponen Audit","Kesesuaian","Temuan","Rekomendasi","Status"],fields:Array(5).fill(""),types:["text","text","textarea","textarea","text"]}
+ };openForm(key,configs[key],index);
+};
+window.deleteRow=(key,index)=>{if(confirm("Hapus data ini?")){db[key].splice(index,1);save();render()}};
+window.resetData=()=>{if(confirm("Kembalikan seluruh data ke kondisi awal?")){db=structuredClone(seed);save();render()}};
+
+</script>
+</body>
+</html>
